@@ -1,8 +1,17 @@
-import requests as r
+import sys
+from RequestModel import RequestModel
 
-class LocationService:
-    def __init__(self,city):
-        self.city = city
 
-    def getCity(self):
-        result = r.get(f"http://dataservice.accuweather.com/locations/v1/cities/search?apikey=aL5cjAhZAkvSRI7QfmkyaXrmDYlGJHie&q={self.city}")
+class LocationService(RequestModel):
+    def __init__(self, url):
+        super().__init__(url)
+
+    def getData(self):
+        try:
+            result = self.request.json()
+            rt = result[0]["Key"]
+            return rt
+        except (KeyError, IndexError) as e:
+            print("Data not found")
+            sys.exit(1)
+
